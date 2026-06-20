@@ -1,0 +1,11 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Effect TypeScript",
+      "description": "Generic Effect TypeScript guidance that extends the base effect-ts skill.",
+      "skills": ["effect-ts-extensions"]
+    }
+  ]
+}
