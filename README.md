@@ -1,6 +1,6 @@
 # Skills
 
-[![skills.sh](https://skills.sh/b/owner/repo)](https://skills.sh/owner/repo)
+[![skills.sh](https://skills.sh/b/hewel/skills)](https://skills.sh/hewel/skills)
 
 Personal repository for agent skills.
 
