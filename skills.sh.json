@@ -3,6 +3,11 @@
   "notGrouped": "bottom",
   "groupings": [
     {
+      "title": "SolidJS",
+      "description": "Generic SolidJS guidance for components, signals, resources, JSX ownership, portals, and conditional classes.",
+      "skills": ["solidjs"]
+    },
+    {
       "title": "Effect TypeScript",
       "description": "Generic Effect TypeScript guidance that extends the base effect-ts skill.",
       "skills": ["effect-ts-extensions"]

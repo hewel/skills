@@ -8,9 +8,16 @@ Personal repository for agent skills.
 
 | Skill | Install | Page |
 | --- | --- | --- |
+| `solidjs` | `npx skills add hewel/skills --skill solidjs` | [skills.sh/hewel/skills/solidjs](https://skills.sh/hewel/skills/solidjs) |
 | `effect-ts-extensions` | `npx skills add hewel/skills --skill effect-ts-extensions` | [skills.sh/hewel/skills/effect-ts-extensions](https://skills.sh/hewel/skills/effect-ts-extensions) |
 
 ## Available Skills
+
+### `solidjs`
+
+Generic SolidJS frontend guidance extracted from JMSR's reusable conventions.
+It covers Solid primitives, `classList`, JSX ownership, context boundaries,
+portal targets, component APIs, and async UI fallbacks.
 
 ### `effect-ts-extensions`
 
