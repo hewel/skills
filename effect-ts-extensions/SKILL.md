@@ -1,6 +1,6 @@
 ---
 name: effect-ts-extensions
-description: Use with the base effect-ts skill for generic Effect TypeScript code. Adds compact, project-agnostic rules for language-service checks, typed failures, schema boundaries, unsafe TypeScript cleanup, Effect.fn workflows, Option handling, runtime boundaries, logging, config, and review. Do not use for React/effect-atom, Tauri, TanStack Router, RPC, HTTP platform APIs, Glim, JMSR, framework-specific, package-install, or library-specific guidance.
+description: Use with the base effect-ts skill for generic Effect TypeScript code. Adds compact, project-agnostic rules for language-service checks, typed failures, schema boundaries, unsafe TypeScript cleanup, Effect.fn workflows, Option handling, Exit/runtime boundaries, fallback placement, logging, config, and review. Do not use for React/effect-atom, Tauri, TanStack Router, RPC, HTTP platform APIs, Glim, JMSR, framework-specific, package-install, or library-specific guidance.
 ---
 
 # Effect TypeScript Extensions
@@ -33,7 +33,7 @@ Then make sure the editor uses workspace TypeScript. Check current docs or the b
 - Use `Effect.fn` for named reusable workflows; keep small local compositions as plain `Effect.gen` when a stable name adds no value.
 - Decode untrusted values with `Schema.decodeUnknown` or explicit narrowers before treating them as domain data.
 - Use `Option` for meaningful absence; avoid `Option.getOrThrow`.
-- Avoid recoverable `throw new Error(...)`, raw workflow `try/catch`, fake success fallback objects, unsafe `as`, double assertions, and `any`.
+- Avoid recoverable `throw new Error(...)`, catch-and-rethrow paths, raw workflow `try/catch`, fake success fallback objects, unsafe `as`, double assertions, and `any`.
 - Do not hide `Effect.runPromise`, `Effect.runSync`, or runtime creation inside low-level modules.
 
 ## Typed Failures
@@ -56,11 +56,15 @@ Brand IDs only when mixing two identifiers would be a real bug. Do not brand eve
 
 Keep fallback defaults at the boundary. Core workflows should report failure or absence explicitly instead of fabricating success-shaped data.
 
+It is fine to return domain-valid empty success values, such as empty collections or pages, when the operation actually succeeded. Do not use those shapes to hide failures or missing required data.
+
 ## Runtime Shape
 
 Low-level modules should describe work as `Effect.Effect<Success, Error, Requirements>` and let outer boundaries run it. Boundaries include CLIs, request handlers, UI events, job runners, process entrypoints, and tests.
 
 At the boundary, inspect the result and translate it into the host model: return a response, render state, log and exit, throw only when the host requires throwing, or convert unrecoverable defects into process failure.
+
+Prefer explicit `Exit` handling or a small boundary helper for fallback pipelines, such as `runWorkflow().then(defaultTo(fallback))`. Keep the fallback helper at the boundary so core workflows still expose typed failures and absence.
 
 Do not switch between Effect and Promise chains mid-workflow. Compose inside Effect, then run once at the edge.
 
@@ -89,7 +93,8 @@ When converting TypeScript to Effect:
 7. Compose reusable workflows with `Effect.fn` and `Effect.gen`.
 8. Handle errors only at recovery or translation points.
 9. Run the final Effect at the outer boundary.
-10. Add or update success and failure tests when behavior changes.
+10. Translate `Exit` or typed errors into the host model at that boundary.
+11. Add or update success and failure tests when behavior changes.
 
 ## Review Checklist
 
@@ -99,6 +104,7 @@ When converting TypeScript to Effect:
 - [ ] Throwing/rejecting APIs are wrapped.
 - [ ] Unknown external data is decoded or narrowed.
 - [ ] Optional values are explicit.
+- [ ] Fallback defaults live at the boundary, not inside core workflows.
 - [ ] Error handling preserves useful variants until a real boundary.
 - [ ] `catchAll`, `mapError`, and `orDie` do not erase recoverable information.
 - [ ] Effects run at an outer boundary, not in low-level modules.
