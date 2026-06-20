@@ -4,6 +4,20 @@
 
 Personal repository for agent skills.
 
+## Installation
+
+Install this skill collection with the `skills` CLI:
+
+```bash
+npx skills add hewel/skills
+```
+
+To opt out of skills.sh telemetry for the install command:
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add hewel/skills
+```
+
 ## Available Skills
 
 ### `effect-ts-extensions`
