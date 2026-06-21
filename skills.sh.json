@@ -11,6 +11,11 @@
       "title": "Effect TypeScript",
       "description": "Generic Effect TypeScript guidance that extends the base effect-ts skill.",
       "skills": ["effect-ts-extensions"]
+    },
+    {
+      "title": "Tracker Execution",
+      "description": "Tracker-backed issue execution with TDD acceptance slices and logical commits.",
+      "skills": ["execute"]
     }
   ]
 }

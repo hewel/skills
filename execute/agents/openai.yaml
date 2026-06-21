@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute"
+  short_description: "Work tracker issues step by step"
+  default_prompt: "Use $execute to implement this tracker issue one acceptance criterion at a time."

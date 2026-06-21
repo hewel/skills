@@ -10,6 +10,7 @@ Personal repository for agent skills.
 | --- | --- | --- |
 | `solidjs` | `npx skills add hewel/skills --skill solidjs` | [skills.sh/hewel/skills/solidjs](https://skills.sh/hewel/skills/solidjs) |
 | `effect-ts-extensions` | `npx skills add hewel/skills --skill effect-ts-extensions` | [skills.sh/hewel/skills/effect-ts-extensions](https://skills.sh/hewel/skills/effect-ts-extensions) |
+| `execute` | `npx skills add hewel/skills --skill execute` | [skills.sh/hewel/skills/execute](https://skills.sh/hewel/skills/execute) |
 
 ## Available Skills
 
@@ -40,3 +41,9 @@ and exact Effect semantics.
 This skill intentionally excludes project, framework, and library-specific
 guidance such as JMSR, Glim, Tauri, TanStack Router, React/effect-atom, RPC, and
 HTTP platform APIs.
+
+### `execute`
+
+Tracker-backed issue execution for GitHub, GitLab, and repo-local tracker tools
+such as Plane. It keeps acceptance criteria as the TDD execution and tracker
+progress unit while committing cohesive logical code units.
