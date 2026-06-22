@@ -1,6 +1,6 @@
 ---
 name: effect-ts-extensions
-description: Use with the base effect-ts skill for generic Effect TypeScript code. Adds compact, project-agnostic rules for language-service checks, typed failures, schema boundaries, unsafe TypeScript cleanup, Effect.fn workflows, Option handling, Exit/runtime boundaries, fallback placement, logging, config, and review. Do not use for React/effect-atom, Tauri, TanStack Router, RPC, HTTP platform APIs, Glim, JMSR, framework-specific, package-install, or library-specific guidance.
+description: Use with the base effect-ts skill for generic Effect TypeScript code. Adds compact, project-agnostic rules for language-service checks, typed failures, schema boundaries, unsafe TypeScript cleanup, Effect.fn workflows, Option handling, Exit/runtime boundaries, fallback placement, Match pattern matching, logging, config, and review. Do not use for React/effect-atom, Tauri, TanStack Router, RPC, HTTP platform APIs, Glim, JMSR, framework-specific, package-install, or library-specific guidance.
 ---
 
 # Effect TypeScript Extensions
@@ -32,8 +32,9 @@ Then make sure the editor uses workspace TypeScript. Check current docs or the b
 - Use `Effect.catchTag` / `Effect.catchTags` when recovery or translation depends on a specific error.
 - Use `Effect.fn` for named reusable workflows; keep small local compositions as plain `Effect.gen` when a stable name adds no value.
 - Decode untrusted values with `Schema.decodeUnknown` or explicit narrowers before treating them as domain data.
-- Use `Option` for meaningful absence; avoid `Option.getOrThrow`.
-- Avoid recoverable `throw new Error(...)`, catch-and-rethrow paths, raw workflow `try/catch`, fake success fallback objects, unsafe `as`, double assertions, and `any`.
+- Use `Option` for meaningful absence that is still a successful value callers must compose, render, or translate.
+- Use `Effect.fromNullishOr` or an equivalent typed Effect failure when missing data should short-circuit the workflow and be translated at the boundary.
+- Avoid recoverable `throw new Error(...)`, catch-and-rethrow paths, raw workflow `try/catch`, fake success fallback objects, unsafe `as`, double assertions, and `any`. In reusable workflows, avoid ad hoc nullish branching for storage, wire, or adapter data; convert absence to `Option` or typed failure. Keep null checks that narrow unknown JSON or wire shapes.
 - Do not hide `Effect.runPromise`, `Effect.runSync`, or runtime creation inside low-level modules.
 
 ## Typed Failures
@@ -65,6 +66,7 @@ Low-level modules should describe work as `Effect.Effect<Success, Error, Require
 At the boundary, inspect the result and translate it into the host model: return a response, render state, log and exit, throw only when the host requires throwing, or convert unrecoverable defects into process failure.
 
 Prefer explicit `Exit` handling or a small boundary helper for fallback pipelines, such as `runWorkflow().then(defaultTo(fallback))`. Keep the fallback helper at the boundary so core workflows still expose typed failures and absence.
+Use `Effect.runPromise` when a helper must preserve rejection semantics into an enclosing `Effect.tryPromise` or host Promise boundary.
 
 Do not switch between Effect and Promise chains mid-workflow. Compose inside Effect, then run once at the edge.
 
@@ -89,12 +91,20 @@ When converting TypeScript to Effect:
 3. Convert recoverable failures to typed `Effect.fail`.
 4. Wrap throwing/rejecting APIs with `Effect.try` / `Effect.tryPromise`.
 5. Decode unknown inputs before use.
-6. Model absence with `Option` or schema optionality.
+6. Model absence as `Option` when it is a successful value, or as a typed failure when it should short-circuit.
 7. Compose reusable workflows with `Effect.fn` and `Effect.gen`.
 8. Handle errors only at recovery or translation points.
 9. Run the final Effect at the outer boundary.
 10. Translate `Exit` or typed errors into the host model at that boundary.
 11. Add or update success and failure tests when behavior changes.
+
+## Pattern Matching
+
+For value-based branching, prefer Effect `Match` (`Match.type<T>().pipe(Match.when(...), Match.orElse(...))`) over `switch`. It stays in the Effect type system and keeps branching consistent with other Effect workflows.
+
+Use `Match.exhaustive` for closed local or domain unions when every member is intentionally handled. Use `Match.orElse` for open, generated, stringly, or persisted values that need a defensive fallback.
+
+Prefer module-level `Match` matchers for stable class-string, label, icon, and similar render helpers so components do not rebuild branch tables during render. Reserve plain `switch` for framework or generated code where Effect is unavailable.
 
 ## Review Checklist
 
@@ -103,10 +113,12 @@ When converting TypeScript to Effect:
 - [ ] No recoverable workflow path throws `new Error(...)`.
 - [ ] Throwing/rejecting APIs are wrapped.
 - [ ] Unknown external data is decoded or narrowed.
-- [ ] Optional values are explicit.
+- [ ] Absence is explicit: `Option` for successful optional values, or typed failure for missing data that should short-circuit.
 - [ ] Fallback defaults live at the boundary, not inside core workflows.
 - [ ] Error handling preserves useful variants until a real boundary.
 - [ ] `catchAll`, `mapError`, and `orDie` do not erase recoverable information.
 - [ ] Effects run at an outer boundary, not in low-level modules.
 - [ ] No new `any`, unsafe `as`, double assertions, or fake fallback data.
 - [ ] Logs and config use Effect facilities inside Effect code.
+- [ ] Closed unions use `Match.exhaustive`; open/generated value branches use `Match.orElse` with a real fallback.
+- [ ] Value-based branching uses Effect `Match`, not `switch`.
