@@ -16,6 +16,11 @@
       "title": "Tracker Execution",
       "description": "Tracker-backed issue execution with TDD acceptance slices and logical commits.",
       "skills": ["execute"]
+    },
+    {
+      "title": "Browser Trace Debugging",
+      "description": "Browser trace analysis for request ordering, screenshots, render noise, and before/after bug narratives.",
+      "skills": ["debug-browser-traces"]
     }
   ]
 }

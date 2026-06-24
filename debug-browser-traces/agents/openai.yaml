@@ -1,0 +1,4 @@
+interface:
+  display_name: "Debug Browser Traces"
+  short_description: "Turn browser traces into bug narratives"
+  default_prompt: "Use $debug-browser-traces to analyze this browser recording and explain the likely UI bug timeline."

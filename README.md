@@ -11,6 +11,7 @@ Personal repository for agent skills.
 | `solidjs` | `npx skills add hewel/skills --skill solidjs` | [skills.sh/hewel/skills/solidjs](https://skills.sh/hewel/skills/solidjs) |
 | `effect-ts-extensions` | `npx skills add hewel/skills --skill effect-ts-extensions` | [skills.sh/hewel/skills/effect-ts-extensions](https://skills.sh/hewel/skills/effect-ts-extensions) |
 | `execute` | `npx skills add hewel/skills --skill execute` | [skills.sh/hewel/skills/execute](https://skills.sh/hewel/skills/execute) |
+| `debug-browser-traces` | `npx skills add hewel/skills --skill debug-browser-traces` | [skills.sh/hewel/skills/debug-browser-traces](https://skills.sh/hewel/skills/debug-browser-traces) |
 
 ## Available Skills
 
@@ -47,3 +48,10 @@ HTTP platform APIs.
 Tracker-backed issue execution for GitHub, GitLab, and repo-local tracker tools
 such as Plane. It keeps acceptance criteria as the TDD execution and tracker
 progress unit while committing cohesive logical code units.
+
+### `debug-browser-traces`
+
+Browser trace debugging for Chrome trace-event JSON, DevTools/WebKit recordings,
+HAR exports, screenshots, console logs, and before/after comparisons. It
+includes a Node analyzer that normalizes timing, request order, visual evidence,
+and noisy render signals into a concise bug narrative.
